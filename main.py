@@ -30,7 +30,7 @@ DB_NAME = BASE_DIR / "arp_medical.db"
 CEP_EMPRESA = "01001000"
 
 # URL da API secundária de distância
-API_DISTANCIA_URL = "http://localhost:8001/calcular-distancia"
+API_DISTANCIA_URL = "http://host.docker.internal:8001/calcular-distancia"
 
 
 def get_connection():
@@ -222,19 +222,19 @@ class InsumoUpdate(BaseModel):
     estado: str = ""
 
 
-@app.get("/")
+@app.get("/", tags=["Geral"])
 def root():
     return {"mensagem": "API Arp Medical funcionando"}
 
 
-@app.get("/cep/{cep}")
+@app.get("/cep/{cep}", tags=["Geral"])
 def consultar_cep(cep: str):
     return buscar_endereco_por_cep(cep)
 
 
 # PRODUTOS
 
-@app.get("/produtos")
+@app.get("/produtos", tags=["Produtos"])
 def listar_produtos():
     conn = get_connection()
     cursor = conn.cursor()
@@ -244,7 +244,7 @@ def listar_produtos():
     return produtos
 
 
-@app.get("/produtos/{produto_id}")
+@app.get("/produtos/{produto_id}", tags=["Produtos"])
 def buscar_produto(produto_id: int):
     conn = get_connection()
     cursor = conn.cursor()
@@ -258,7 +258,7 @@ def buscar_produto(produto_id: int):
     return dict(produto)
 
 
-@app.post("/produtos")
+@app.post("/produtos", tags=["Produtos"])
 def criar_produto(produto: ProdutoCreate):
     conn = get_connection()
     cursor = conn.cursor()
@@ -373,7 +373,7 @@ def criar_produto(produto: ProdutoCreate):
     return produto_salvo
 
 
-@app.put("/produtos/{produto_id}")
+@app.put("/produtos/{produto_id}", tags=["Produtos"])
 def atualizar_produto(produto_id: int, produto: ProdutoUpdate):
     conn = get_connection()
     cursor = conn.cursor()
@@ -423,7 +423,7 @@ def atualizar_produto(produto_id: int, produto: ProdutoUpdate):
     return atualizado
 
 
-@app.delete("/produtos/{produto_id}")
+@app.delete("/produtos/{produto_id}", tags=["Produtos"])
 def deletar_produto(produto_id: int):
     conn = get_connection()
     cursor = conn.cursor()
@@ -444,7 +444,7 @@ def deletar_produto(produto_id: int):
 
 # VENDAS
 
-@app.post("/vendas")
+@app.post("/vendas", tags=["Vendas"])
 def registrar_venda(venda: VendaCreate):
     conn = get_connection()
     cursor = conn.cursor()
@@ -486,7 +486,7 @@ def registrar_venda(venda: VendaCreate):
     return {"mensagem": "Venda registrada com sucesso"}
 
 
-@app.get("/vendas")
+@app.get("/vendas", tags=["Vendas"])
 def listar_vendas():
     conn = get_connection()
     cursor = conn.cursor()
@@ -498,7 +498,7 @@ def listar_vendas():
 
 # INSUMOS
 
-@app.get("/insumos")
+@app.get("/insumos", tags=["Insumos"])
 def listar_insumos():
     conn = get_connection()
     cursor = conn.cursor()
@@ -508,7 +508,7 @@ def listar_insumos():
     return insumos
 
 
-@app.get("/insumos/{insumo_id}")
+@app.get("/insumos/{insumo_id}", tags=["Insumos"])
 def buscar_insumo(insumo_id: int):
     conn = get_connection()
     cursor = conn.cursor()
@@ -522,7 +522,7 @@ def buscar_insumo(insumo_id: int):
     return dict(insumo)
 
 
-@app.get("/insumos/{insumo_id}/distancia")
+@app.get("/insumos/{insumo_id}/distancia", tags=["Insumos"])
 def calcular_distancia_fornecedor(insumo_id: int):
     insumo = buscar_insumo_por_id_db(insumo_id)
 
@@ -549,7 +549,7 @@ def calcular_distancia_fornecedor(insumo_id: int):
     }
 
 
-@app.post("/insumos")
+@app.post("/insumos", tags=["Insumos"])
 def criar_insumo(insumo: InsumoCreate):
     conn = get_connection()
     cursor = conn.cursor()
@@ -613,7 +613,7 @@ def criar_insumo(insumo: InsumoCreate):
     return novo_insumo
 
 
-@app.put("/insumos/{insumo_id}")
+@app.put("/insumos/{insumo_id}", tags=["Insumos"])
 def atualizar_insumo(insumo_id: int, insumo: InsumoUpdate):
     conn = get_connection()
     cursor = conn.cursor()
@@ -661,7 +661,7 @@ def atualizar_insumo(insumo_id: int, insumo: InsumoUpdate):
     return atualizado
 
 
-@app.delete("/insumos/{insumo_id}")
+@app.delete("/insumos/{insumo_id}", tags=["Insumos"])
 def deletar_insumo(insumo_id: int):
     conn = get_connection()
     cursor = conn.cursor()
