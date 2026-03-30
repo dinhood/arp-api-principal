@@ -56,3 +56,7 @@ Esta API implementa as regras de negócio do sistema de estoque da ARP Medical, 
 ```bash
 docker build -t arp-api-principal .
 docker run -d -p 8000:8000 arp-api-principal
+
+## Arquitetura
+
+![Arquitetura](arquitetura.png)
